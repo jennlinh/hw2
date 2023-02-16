@@ -9,6 +9,7 @@
 #include "db_parser.h"
 #include "product_parser.h"
 #include "util.h"
+#include "mydatastore.h"
 
 using namespace std;
 struct ProdNameSorter {
@@ -29,7 +30,7 @@ int main(int argc, char* argv[])
      * Declare your derived DataStore object here replacing
      *  DataStore type to your derived type
      ****************/
-    DataStore ds;
+    MyDataStore ds;
 
 
 
@@ -73,26 +74,31 @@ int main(int argc, char* argv[])
             if( cmd == "AND") {
                 string term;
                 vector<string> terms;
-                while(ss >> term) {
-                    term = convToLower(term);
-                    terms.push_back(term);
+                while(ss >> term) 
+								{
+                  term = convToLower(term);
+                  terms.push_back(term);
                 }
                 hits = ds.search(terms, 0);
                 displayProducts(hits);
             }
-            else if ( cmd == "OR" ) {
+            else if ( cmd == "OR" ) 
+						{
                 string term;
                 vector<string> terms;
-                while(ss >> term) {
+                while(ss >> term) 
+								{
                     term = convToLower(term);
                     terms.push_back(term);
                 }
                 hits = ds.search(terms, 1);
                 displayProducts(hits);
             }
-            else if ( cmd == "QUIT") {
+            else if ( cmd == "QUIT") 
+						{
                 string filename;
-                if(ss >> filename) {
+                if(ss >> filename) 
+								{
                     ofstream ofile(filename.c_str());
                     ds.dump(ofile);
                     ofile.close();
@@ -100,10 +106,34 @@ int main(int argc, char* argv[])
                 done = true;
             }
 	    /* Add support for other commands here */
+						else if (cmd == "ADD")
+						{
+							string user;
+							if (ss >> user)
+							{
+								user = convToLower(user);
+							// compare to current user list and if correct, then add to cart
+							//invalid username + invalid index
+							//map is like a set so everything in a map comes in pair first is map second is value every key is distinct and second part is what it points to. values can be duplicates but the anme cant be the same
+							}
+						}
+						else if (cmd == "VIEWCART"){
+							string user;
 
-
-
-
+							if (ss >> user){
+								user = convToLower(user);
+							//check for invalid username
+							}
+							//displayProducts(cartThatDoesntExist)
+						}
+						else if (cmd == "BUYCART"){
+							string user;
+							if (ss >> user){
+							
+							user = convToLower(user);
+							//invalid username
+							}
+						}
             else {
                 cout << "Unknown command" << endl;
             }
